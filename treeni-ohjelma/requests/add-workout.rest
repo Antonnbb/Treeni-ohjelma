@@ -1,0 +1,10 @@
+POST http://localhost:3001/api/generate-workout
+Content-Type: application/json
+
+{
+  "weight": 80,
+  "height": 180,
+  "goal": "lihaskasvu",
+  "activity_level_id": 2,
+  "nutrition_level_id": 4
+}
