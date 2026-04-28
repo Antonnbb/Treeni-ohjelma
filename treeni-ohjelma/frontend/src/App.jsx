@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import axios from 'axios'
+import jsPDF from "jspdf";
 import './index.css'
 
 
@@ -33,6 +34,40 @@ function App() {
     }
   };
 
+  const bmi =
+    weight && height
+      ? (Number(weight) / ((Number(height) / 100) ** 2)).toFixed(1)
+      : "";
+
+  const getBmiCategory = (bmi) => {
+    const value = Number(bmi);
+
+    if (value < 18.5) return "Alipaino";
+    if (value < 25) return "Normaalipaino";
+    if (value < 30) return "Ylipaino";
+    if (value < 35) return "Lihavuus";
+    return "Vaikea lihavuus";
+  };
+
+  const downloadPDF = () => {
+    const doc = new jsPDF();
+
+    doc.setFontSize(18);
+    doc.text("Treeniohjelma", 10, 15);
+
+    doc.setFontSize(12);
+    doc.text(`Paino: ${weight} kg`, 10, 30);
+    doc.text(`Pituus: ${height} cm`, 10, 38);
+    doc.text(`Tavoite: ${goal}`, 10, 46);
+    doc.text(`BMI: ${bmi}`, 10, 54);
+
+    const lines = doc.splitTextToSize(workout, 180);
+    doc.text(lines, 10, 70);
+
+    doc.save("treeniohjelma.pdf");
+  };
+
+
   return (
     <div className="container">
       <h1>Treeniohjelma</h1>
@@ -41,8 +76,21 @@ function App() {
 
         <input placeholder="Paino kg" value={weight} onChange={(e) => setWeight(e.target.value)} />
         <input placeholder="Pituus cm" value={height} onChange={(e) => setHeight(e.target.value)} />
-        <input placeholder="Tavoite esim: Painon pudotus" value={goal} onChange={(e) => setGoal(e.target.value)} />
+        <select value={goal} onChange={(e) => setGoal(e.target.value)}>
+          <option value="">Valitse tavoite</option>
+          <option value="lihaskasvu">Lihaskasvu</option>
+          <option value="painonpudotus">Painonpudotus</option>
+          <option value="voiman kehitys">Voiman kehitys</option>
+          <option value="kestävyyden parantaminen">Kestävyyden parantaminen</option>
+          <option value="yleinen hyvinvointi">Yleinen hyvinvointi</option>
+        </select>
 
+        {bmi && (
+          <div className="bmi-box">
+            BMI: {bmi} — {getBmiCategory(bmi)}
+          </div>
+        )}
+        
         <select value={activityLevelId} onChange={(e) => setActivityLevelId(e.target.value)}>
           <option value="">Valitse aktiivisuustaso</option>
           <option value="1">En liiku juuri lainkaan</option>
@@ -67,9 +115,15 @@ function App() {
       </div>
 
       {workout && (
-        <div className="result">
-          {workout}
-        </div>
+        <>
+          <div className="result">
+            {workout}
+          </div>
+
+          <button onClick={downloadPDF}>
+            Lataa PDF
+          </button>
+        </>
       )}
     </div>
   );
