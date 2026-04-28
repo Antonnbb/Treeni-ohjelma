@@ -136,7 +136,7 @@ const [nutritionLevels, setNutritionLevels] = useState([]);
           value={nutritionLevelId}
           onChange={(e) => setNutritionLevelId(e.target.value)}
         >
-        <option value="">Valitse ruokailutottumuksesi</option>
+        <option value="">Valitse painon vaihtelu</option>
 
         {nutritionLevels.map((level) => (
           <option key={level.id} value={level.id}>
