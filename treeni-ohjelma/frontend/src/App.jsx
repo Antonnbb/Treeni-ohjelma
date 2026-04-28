@@ -3,8 +3,6 @@ import axios from 'axios'
 import jsPDF from "jspdf";
 import './index.css'
 
-const baseUrl = '/api/note'
-
 
 function App() {
   const [weight, setWeight] = useState("");
@@ -22,12 +20,12 @@ function App() {
       try {
         // Haetaan activity levels
         const activityResponse = await axios.get(
-          "/api/note/activity-levels"
+          "/api/activity-levels"
         );
 
         // Haetaan nutrition levels
         const nutritionResponse = await axios.get(
-          "/api/note/nutrition-levels"
+          "/api/nutrition-levels"
         );
 
         // Tallennetaan stateen
@@ -47,7 +45,7 @@ function App() {
       setLoading(true);
       setWorkout("");
 
-      const res = await axios.post("/api/note/generate-workout", {
+      const res = await axios.post("/api/generate-workout", {
         weight,
         height,
         goal,
