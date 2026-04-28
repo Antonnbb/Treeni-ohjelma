@@ -5,12 +5,6 @@ import './index.css'
 
 const baseUrl = '/api/note'
 
-const getAll = () => {
-  const request = axios.get(baseUrl)
-  return request.then(response => response.data)
-}
-
-
 
 function App() {
   const [weight, setWeight] = useState("");
@@ -28,12 +22,12 @@ function App() {
       try {
         // Haetaan activity levels
         const activityResponse = await axios.get(
-          "http://localhost:3001/api/activity-levels"
+          "/api/activity-levels"
         );
 
         // Haetaan nutrition levels
         const nutritionResponse = await axios.get(
-          "http://localhost:3001/api/nutrition-levels"
+          "/api/nutrition-levels"
         );
 
         // Tallennetaan stateen
@@ -53,7 +47,7 @@ function App() {
       setLoading(true);
       setWorkout("");
 
-      const res = await axios.post("http://localhost:3001/api/generate-workout", {
+      const res = await axios.post("/api/generate-workout", {
         weight,
         height,
         goal,
