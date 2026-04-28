@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import axios from 'axios'
 import jsPDF from "jspdf";
 import './index.css'
@@ -8,10 +8,18 @@ function App() {
   const [weight, setWeight] = useState("");
   const [height, setHeight] = useState("");
   const [goal, setGoal] = useState("");
-  const [activityLevelId, setActivityLevelId] = useState("");
-  const [nutritionLevelId, setNutritionLevelId] = useState("");
+  const [activityLevelId, setActivityLevelId] = useState([]);
+  const [nutritionLevelId, setNutritionLevelId] = useState([]);
   const [workout, setWorkout] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    axios.get("http://localhost:3001/api/activity-levels")
+      .then((res) => setActivityLevels(res.data));
+
+    axios.get("http://localhost:3001/api/nutrition-levels")
+      .then((res) => setNutritionLevels(res.data));
+  }, []);
 
   const generateWorkout = async () => {
     try {
@@ -91,16 +99,30 @@ function App() {
             BMI: {bmi} — {getBmiCategory(bmi)}
           </div>
         )}
-        
-        <select value={activityLevelId} onChange={(e) => setActivityLevelId(e.target.value)}>
-          <option value="">Valitse aktiivisuustaso</option>
-          <option value="1">En liiku juuri lainkaan</option>
-          <option value="2">Liikun kerran viikossa</option>
-          <option value="3">Liikun 2-3 kertaa viikossa</option>
-          <option value="4">Liikun useasti viikossa</option>
-          <option value="5">Liikun lähes päivittäin</option>
-        </select>
 
+        <select
+          value={activityLevelId}
+          onChange={(e) => setActivityLevelId(e.target.value)}
+        >
+          <option value="">Valitse aktiivisuustaso</option>
+
+          {activityLevels.map((level) => (
+            <option key={level.id} value={level.id}>
+              {level.name}
+            </option>
+          ))}
+        </select
+        <select
+          value={nutritionLevelId}
+          onChange={(e) => setNutritionLevelId(e.target.value)}
+        >
+          <option value="">Valitse ruokailutottumuksesi</option>
+
+          {nutritionLevels.map((level) => (
+            <option key={level.id} value={level.id}>
+              {level.name}
+            </option>
+          ))}
         <select value={nutritionLevelId} onChange={(e) => setNutritionLevelId(e.target.value)}>
           <option value="">Valitse Painotaso</option>
           <option value="1">Painoni on laskenut paljon kuukauden aikana</option>
