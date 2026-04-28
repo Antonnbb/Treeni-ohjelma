@@ -46,7 +46,8 @@ function App() {
     if (value < 25) return "Normaalipaino";
     if (value < 30) return "Ylipaino";
     if (value < 35) return "Lihavuus";
-    return "Vaikea lihavuus";
+    if (value < 40) return "Vaikea lihavuus";
+    return "Sairaalloinen lihavuus";
   };
 
   const downloadPDF = () => {
