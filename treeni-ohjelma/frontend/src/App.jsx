@@ -3,14 +3,14 @@ import axios from 'axios'
 import jsPDF from "jspdf";
 import './index.css'
 
-const baseUrl = 'http://localhost:3001/api/notes'
+const baseUrl = '/api/note'
 
 const getAll = () => {
   const request = axios.get(baseUrl)
   return request.then(response => response.data)
 }
 
-export default { getAll, create, update }
+
 
 function App() {
   const [weight, setWeight] = useState("");
@@ -193,4 +193,4 @@ function App() {
 }
 
 
-export default App
+export default { App, getAll, create, update }
