@@ -11,7 +11,7 @@ function App() {
   const [activityLevelId, setActivityLevelId] = useState('');
   const [nutritionLevelId, setNutritionLevelId] = useState('');
   const [activityLevels, setActivityLevels] = useState([]);
-const [nutritionLevels, setNutritionLevels] = useState([]);
+  const [nutritionLevels, setNutritionLevels] = useState([]);
   const [workout, setWorkout] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -77,20 +77,39 @@ const [nutritionLevels, setNutritionLevels] = useState([]);
     return "Sairaalloinen lihavuus";
   };
 
+
   const downloadPDF = () => {
     const doc = new jsPDF();
 
+    const pageHeight = doc.internal.pageSize.height;
+    const margin = 10;
+    let y = 15;
+
     doc.setFontSize(18);
-    doc.text("Treeniohjelma", 10, 15);
+    doc.text("Treeniohjelma", margin, y);
+    y += 15;
 
     doc.setFontSize(12);
-    doc.text(`Paino: ${weight} kg`, 10, 30);
-    doc.text(`Pituus: ${height} cm`, 10, 38);
-    doc.text(`Tavoite: ${goal}`, 10, 46);
-    doc.text(`BMI: ${bmi}`, 10, 54);
+    doc.text(`Paino: ${weight} kg`, margin, y);
+    y += 8;
+    doc.text(`Pituus: ${height} cm`, margin, y);
+    y += 8;
+    doc.text(`Tavoite: ${goal}`, margin, y);
+    y += 8;
+    doc.text(`BMI: ${bmi}`, margin, y);
+    y += 12;
 
     const lines = doc.splitTextToSize(workout, 180);
-    doc.text(lines, 10, 70);
+
+    lines.forEach((line) => {
+      if (y > pageHeight - 15) {
+        doc.addPage();
+        y = 15;
+      }
+
+      doc.text(line, margin, y);
+      y += 7;
+    });
 
     doc.save("treeniohjelma.pdf");
   };
@@ -136,13 +155,13 @@ const [nutritionLevels, setNutritionLevels] = useState([]);
           value={nutritionLevelId}
           onChange={(e) => setNutritionLevelId(e.target.value)}
         >
-        <option value="">Valitse painon vaihtelu</option>
+          <option value="">Valitse painon vaihtelu</option>
 
-        {nutritionLevels.map((level) => (
-          <option key={level.id} value={level.id}>
-            {level.name}
-          </option>
-        ))}
+          {nutritionLevels.map((level) => (
+            <option key={level.id} value={level.id}>
+              {level.name}
+            </option>
+          ))}
         </select>
 
         <button onClick={generateWorkout} disabled={loading}>
