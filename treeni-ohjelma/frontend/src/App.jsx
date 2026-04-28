@@ -111,11 +111,11 @@ function App() {
               {level.name}
             </option>
           ))}
-        </select
+        </select>
         <select
           value={nutritionLevelId}
           onChange={(e) => setNutritionLevelId(e.target.value)}
-        >
+          />
           <option value="">Valitse ruokailutottumuksesi</option>
 
           {nutritionLevels.map((level) => (
