@@ -193,4 +193,4 @@ function App() {
 }
 
 
-export default { App, getAll, create, update }
+export default { App, getAll}
