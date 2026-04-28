@@ -8,17 +8,36 @@ function App() {
   const [weight, setWeight] = useState("");
   const [height, setHeight] = useState("");
   const [goal, setGoal] = useState("");
-  const [activityLevelId, setActivityLevelId] = useState([]);
-  const [nutritionLevelId, setNutritionLevelId] = useState([]);
+  const [activityLevelId, setActivityLevelId] = useState('');
+  const [nutritionLevelId, setNutritionLevelId] = useState('');
+  const [activityLevels, setActivityLevels] = useState([]);
+const [nutritionLevels, setNutritionLevels] = useState([]);
   const [workout, setWorkout] = useState("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    axios.get("http://localhost:3001/api/activity-levels")
-      .then((res) => setActivityLevels(res.data));
+    const fetchLevels = async () => {
+      try {
+        // Haetaan activity levels
+        const activityResponse = await axios.get(
+          "http://localhost:3001/api/activity-levels"
+        );
 
-    axios.get("http://localhost:3001/api/nutrition-levels")
-      .then((res) => setNutritionLevels(res.data));
+        // Haetaan nutrition levels
+        const nutritionResponse = await axios.get(
+          "http://localhost:3001/api/nutrition-levels"
+        );
+
+        // Tallennetaan stateen
+        setActivityLevels(activityResponse.data);
+        setNutritionLevels(nutritionResponse.data);
+
+      } catch (error) {
+        console.error("Virhe tasojen haussa:", error);
+      }
+    };
+
+    fetchLevels();
   }, []);
 
   const generateWorkout = async () => {
@@ -112,24 +131,18 @@ function App() {
             </option>
           ))}
         </select>
+
         <select
           value={nutritionLevelId}
           onChange={(e) => setNutritionLevelId(e.target.value)}
-          />
-          <option value="">Valitse ruokailutottumuksesi</option>
+        >
+        <option value="">Valitse ruokailutottumuksesi</option>
 
-          {nutritionLevels.map((level) => (
-            <option key={level.id} value={level.id}>
-              {level.name}
-            </option>
-          ))}
-        <select value={nutritionLevelId} onChange={(e) => setNutritionLevelId(e.target.value)}>
-          <option value="">Valitse Painotaso</option>
-          <option value="1">Painoni on laskenut paljon kuukauden aikana</option>
-          <option value="2">Painoni on laskenut kuukauden aikana</option>
-          <option value="3">Painoni ei ole noussut kuukauden aikana</option>
-          <option value="4">Painoni on noussut kuukauden aikana</option>
-          <option value="5">Painoni on noussut paljon kuukauden aikana</option>
+        {nutritionLevels.map((level) => (
+          <option key={level.id} value={level.id}>
+            {level.name}
+          </option>
+        ))}
         </select>
 
         <button onClick={generateWorkout} disabled={loading}>
