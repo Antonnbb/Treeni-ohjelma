@@ -22,12 +22,12 @@ function App() {
       try {
         // Haetaan activity levels
         const activityResponse = await axios.get(
-          "/api/activity-levels"
+          "/api/note/activity-levels"
         );
 
         // Haetaan nutrition levels
         const nutritionResponse = await axios.get(
-          "/api/nutrition-levels"
+          "/api/note/nutrition-levels"
         );
 
         // Tallennetaan stateen
@@ -47,7 +47,7 @@ function App() {
       setLoading(true);
       setWorkout("");
 
-      const res = await axios.post("/api/generate-workout", {
+      const res = await axios.post("/api/note/generate-workout", {
         weight,
         height,
         goal,
