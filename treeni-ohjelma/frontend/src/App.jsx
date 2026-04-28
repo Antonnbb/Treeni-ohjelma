@@ -111,8 +111,7 @@ function App() {
               {level.name}
             </option>
           ))}
-        </select>
-
+        </select
         <select
           value={nutritionLevelId}
           onChange={(e) => setNutritionLevelId(e.target.value)}
@@ -124,6 +123,13 @@ function App() {
               {level.name}
             </option>
           ))}
+        <select value={nutritionLevelId} onChange={(e) => setNutritionLevelId(e.target.value)}>
+          <option value="">Valitse Painotaso</option>
+          <option value="1">Painoni on laskenut paljon kuukauden aikana</option>
+          <option value="2">Painoni on laskenut kuukauden aikana</option>
+          <option value="3">Painoni ei ole noussut kuukauden aikana</option>
+          <option value="4">Painoni on noussut kuukauden aikana</option>
+          <option value="5">Painoni on noussut paljon kuukauden aikana</option>
         </select>
 
         <button onClick={generateWorkout} disabled={loading}>

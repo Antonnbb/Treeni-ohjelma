@@ -18,8 +18,27 @@ app.get("/", (req, res) => {
   res.send("Backend toimii");
 });
 
+app.get("/api/activity-levels", async (req, res) => {
+  const { data, error } = await supabase
+    .from("activity_levels")
+    .select("*")
+    .order("id");
 
+  if (error) return res.status(500).json({ error: error.message });
 
+  res.json(data);
+});
+
+app.get("/api/nutrition-levels", async (req, res) => {
+  const { data, error } = await supabase
+    .from("nutrition_levels")
+    .select("*")
+    .order("id");
+
+  if (error) return res.status(500).json({ error: error.message });
+
+  res.json(data);
+});
 
 app.post("/api/generate-workout", async (req, res) => {
   try {
