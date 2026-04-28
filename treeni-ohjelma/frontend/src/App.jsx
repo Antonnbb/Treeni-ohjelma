@@ -187,4 +187,4 @@ function App() {
 }
 
 
-export default { App, getAll}
+export default App
